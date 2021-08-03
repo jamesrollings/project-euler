@@ -6,6 +6,6 @@ Find the sum of all the multiples of 3 or 5 below 1000.
 
 const limit = 1000;
 
-const sum = [...Array(limit)].fill().map((_, i) => i).filter((num) => num % 3 === 0 || num % 5 === 0).reduce((acc, curr) => acc + curr);
+const sum = [...Array(limit)].fill().map((_, i) => i).reduce((acc, curr) => curr % 3 === 0 || curr % 5 === 0 ? acc + curr : acc + 0)
 
 console.log(sum);
