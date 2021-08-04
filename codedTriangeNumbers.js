@@ -17,26 +17,29 @@ function isTriangleNumber(number) {
     
 }
 
-const arrAlphabet = [...Array(26).keys()].map((key, index) => ({[String.fromCharCode(65 + index)]: key + 1}))
+const objAlphabet = [...Array(26).keys()].reduce((acc, curr, index) => {
+    acc[String.fromCharCode(65 + index)] = curr + 1
+    return acc;
+}, {})
 
 function getPositionFromLetter(letter) {
-    return Object.values(arrAlphabet.find((element) => element[letter]))[0]
+    return objAlphabet[letter];
 }
 
 (async () => {
-    const words = await fs.readFile('C:\\Users\\James.Rollings\\Documents\\p042_words.txt')
-    const arrWords = words.toString().split(',').map((word) => word.replace(/"/g, ''));
-
-    const charNums = arrWords.map((word) => word.split('').map((letter) => getPositionFromLetter(letter)));
-
-    const sum = charNums.map((arrNum) => [arrNum.reduce((acc, curr) => acc + curr)]);
-
-    const triangleWords = [];
-
-    sum.forEach((number) => {
-        if (isTriangleNumber(number[0])) {
-            triangleWords.push(number[0])
+    console.time('Script time');
+    const words = (await fs.readFile('C:\\Users\\James.Rollings\\Documents\\p042_words.txt')).toString().split(',').map((char) => char.replace(/"/g, ''));
+    const result = words.reduce((list, word) => {
+        const total = word.split('').reduce((acc, curr) => {
+            curr = Number(getPositionFromLetter(curr));
+            return acc + curr;
+        }, 0)
+        if (isTriangleNumber(total)) {
+            list.push(total);
+            return list
         }
-    })
-    console.log(triangleWords.length)
+        return list
+    }, [])
+    console.log(result.length);
+    console.timeEnd('Script time');
 })();
