@@ -12,18 +12,11 @@ Using words.txt (right click and 'Save Link/Target As...'), a 16K text file cont
 
 const fs = require('fs').promises;
 
+// Disclaimer: Mathematical formula was researched, then applied to a function to return a Boolean value for each number.
+
 function isTriangleNumber(number) {
-    return Number.isInteger(Math.sqrt(8 * number + 1)) // Disclaimer: Mathematical formula was researched, then applied to a function to return a Boolean value for each number.
+    return Number.isInteger(Math.sqrt(8 * number + 1))
     
-}
-
-const objAlphabet = [...Array(26).keys()].reduce((acc, curr, index) => {
-    acc[String.fromCharCode(65 + index)] = curr + 1
-    return acc;
-}, {})
-
-function getPositionFromLetter(letter) {
-    return objAlphabet[letter];
 }
 
 (async () => {
@@ -31,15 +24,14 @@ function getPositionFromLetter(letter) {
     const words = (await fs.readFile('C:\\Users\\James.Rollings\\Documents\\p042_words.txt')).toString().split(',').map((char) => char.replace(/"/g, ''));
     const result = words.reduce((list, word) => {
         const total = word.split('').reduce((acc, curr) => {
-            curr = Number(getPositionFromLetter(curr));
-            return acc + curr;
+            return acc + ((curr.charCodeAt() + 1) - 65);
         }, 0)
         if (isTriangleNumber(total)) {
             list.push(total);
-            return list
+            return list;
         }
-        return list
+        return list;
     }, [])
     console.log(result.length);
-    console.timeEnd('Script time');
+    console.timeEnd('Script time'); // ~17ms avg. Original attempt was ~35ms
 })();
