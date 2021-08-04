@@ -16,22 +16,17 @@ const fs = require('fs').promises;
 
 function isTriangleNumber(number) {
     return Number.isInteger(Math.sqrt(8 * number + 1))
-    
 }
 
 (async () => {
     console.time('Script time');
+    
     const words = (await fs.readFile('C:\\Users\\James.Rollings\\Documents\\p042_words.txt')).toString().split(',').map((char) => char.replace(/"/g, ''));
     const result = words.reduce((list, word) => {
-        const total = word.split('').reduce((acc, curr) => {
-            return acc + ((curr.charCodeAt() + 1) - 65);
-        }, 0)
-        if (isTriangleNumber(total)) {
-            list.push(total);
-            return list;
-        }
-        return list;
-    }, [])
-    console.log(result.length);
-    console.timeEnd('Script time'); // ~17ms avg. Original attempt was ~35ms
+        const total = word.split('').reduce((acc, curr) => acc + (curr.charCodeAt() - 64), 0);
+        return isTriangleNumber(total) ? list.concat(total) : list
+    }, []).length;
+    
+    console.log(result);
+    console.timeEnd('Script time'); // ~17ms avg. Original attempt was ~35ms.
 })();
